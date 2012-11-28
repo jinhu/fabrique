@@ -1,0 +1,19 @@
+<h2>About Fabrique</h2>
+
+<p>Fabrique is developed and maintained by <a href="http://www.twitter.com/rioakasaka">@rioakasaka</a></p>
+
+<p>Fabrique is one of the few web application code editing environments that support touch input. It combines canvas elements, jQuery, and  
+  live code editing for a fun, touch-based iterative  
+  programming experience. Start by clicking on any 
+  number or font in the code. It's built using a combination of jQuery and canvas (jCanvas) as well as jQuery Touch Punch in order to bring the interactivity to touch-based interfaces. It is inspired by <a href="http://worrydream.com/LadderOfAbstraction/">Bret Victor's work</a>.</p>
+
+<div class="fb-like" data-href="http://www.rioleo.org/fabrique" data-send="true" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=296344457137837";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
