@@ -1,7 +1,7 @@
-fabrique
+Fabrique
 ========
 
-Live demo at [http://www.rioleo.org/fabrique](http://www.rioleo.org/fabrique)
+Live demo at **[http://www.rioleo.org/fabrique](http://www.rioleo.org/fabrique)**
 
 Fabrique combines canvas elements, jQuery and live code editing for a fun, touch-based iterative programming experience. All of the interactions function on an iPad.
 
