@@ -1,6 +1,11 @@
 <?php
-include 'Mobile_Detect.php';
-$detect = new Mobile_Detect();
+//header('Content-type: application/xhtml+xml');
+session_start();
+//if ($_SESSION['sessionid'] =='') {
+	//session_start()
+$_SESSION['sessionid'] = session_id();
+//}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
@@ -19,7 +24,7 @@ $detect = new Mobile_Detect();
 <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
 
 <link rel="apple-touch-icon" href="appicon.png" />
-<link rel="apple-touch-startup-image" href="startscreen.png">
+<link rel="apple-touch-startup-image" href="startup.png">
 
 <!-- jQuery -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" type="text/css" media="all" />
@@ -34,20 +39,7 @@ $detect = new Mobile_Detect();
 
 <!-- CodeMirror -->
 <link rel="stylesheet" href="js/lib/codemirror.css" />
-<?php
-	    if ($detect->isMobile()) {
-	    	?>
-
-<script type="text/javascript" src="js/lib/codemirrorm.js"></script>
-<?php
-	    } else {
-	    ?>
-	 <script type="text/javascript" src="js/lib/codemirror.js"></script>
-   
-	    <?php	
-	    	
-	    }
-	    ?>
+<script type="text/javascript" src="http://codemirror.net/lib/codemirror.js"></script>
 <script src="js/mode/javascript/javascript.js"></script>
 <script type="text/javascript" src="js/lib/util/searchcursor.js"></script>
 <script type="text/javascript" src="js/lib/util/search.js"></script>
@@ -65,7 +57,7 @@ $detect = new Mobile_Detect();
 <body> 
  <div id="header">
 	<div class="leftwrapper">
-		<a href="index.php"><h1>fabrique<span>alpha</span></h1></a>
+		<a href="index.php"><h1>fabrique</h1></a>
 	</div>
 	<div class="rightwrapper">
 
@@ -111,7 +103,7 @@ $detect = new Mobile_Detect();
  
   <div id="middle">
   <div class="renderarea">
-   <canvas></canvas>
+   <canvas width='1040' height='1100'></canvas>
    <div id="elements"></div>
 	 <div id="center">
 	 	<div id="fig"></div>
@@ -139,16 +131,8 @@ $detect = new Mobile_Detect();
 	</form>
 
 	<div class="tip hidden">
-		
-	</div>
-	<div class="addDelete hidden">
-		<div class="subicons add"></div>
-		<div class="subicons delete"></div>
-	</div>
-	
-	<div class="trueFalse hidden">
-		<div class="subclasses" id="true">true</div>
-		<div class="subclasses" id="false">false</div>
+		<div class="subicons" id="add"></div>
+		<div class="subicons" id="delete"></div>
 	</div>
 	
 	<section id="slider2" class="hidden">	
@@ -177,106 +161,7 @@ $detect = new Mobile_Detect();
  } ?>
  
  <script type="text/javascript" src="js/globalfunctions.js"></script>
-<script>
-var pianoAdded = false;
-var numElements = 0;
-$(function() {
-	$(".subclasses2").click(function() {
-     		hideAll();
-     		var line = editor.getLine(currLine.line);
-     		var type = $(this).attr("type");
-     		var method = $(this).attr("method");
-     		if (method == "css") {
-	     		if (type == "number") {
-	     			typeResult =  10 + " + \"px\"";	
-	     		}
-	     		if (type == "color") {
-	     			typeResult = "\"#000\""; 	
-	     		}
-	     		if (type == "decimal") {
-	     			typeResult = "0.5"; 	
-	     		}
-	     		if (type == "angle") {
-	     			typeResult =  "\"rotate(\" + " + 90 + " + \"deg)\""; 	
-	     		}
-	     		if (type == "background-image") {
-	     			typeResult = "\"-webkit-linear-gradient(top, \"" + " + \"#2F2727\" + " + "\", \"" + " + \"#1a82f7\" + " + "\")\"";	
-	     		}
-	     		if (type == "choice") {
-	     			typeResult = "\"" + $(this).attr("id") + "\"";
-	     		}
-     		editor.replaceRange("  .css(\"" + $(this).html() + "\", " + typeResult + ")\n", {line:currLine.line+1, ch:0});
-     		runCode();
-     		} else if (method == "click") {
-     			
-     			editor.replaceRange("  .click(function() { doSomething })\n", {line:currLine.line+1, ch:0});
-     			runCode();
-     		} else if (method == "method") {
-     			
-     			//editor.replaceRange("  .draggable()\n", {line:currLine.line+1, ch:0});
-     			//runCode();
-     		} else if (method == "action") {
-     			
-     			editor.setLine(currLine.line, "  .click(function() { playSound(2.00) })\n");
-     			//alert(editor.getLine(currLine.line));
-     			if (!pianoAdded) {
-	     			$.ajax({
-				        type: "POST",
-				        url: 'getSnippet.php',
-				        data: "type=audio",
-				        success: function (data) {
-				        	pianoAdded = true;
-							editor.replaceRange(data, {line:currLine.line+1, ch:0});
-							runCode();
-				        }
-	     			});
-     			}
-     		}
-     		
-     		//alert($(this).attr("type"));
-     		//alert($(this).attr("id"));
-     		
-     		
-     	});
-
-});
-
-function hideOne() {
-	if (opened) {
-		$(".toolbar").animate({"top": "+=160px"}, "slow");
-		opened = false;
-	}
-}
-function hideTwo() {
-	if (opened2) {
-		$(".toolbar2").animate({"top": "+=160px"}, "slow");
-		opened2 = false;
-	}
-}
-function showOne() {
-	 hideTwo();
-	 $(".toolbar").css("top", ($( window ).height()) + "px");
-     $(".toolbar").show();
-     $(".toolbar").animate({"top": "-=160px"}, "slow");
-     opened = true;
-}
-function showTwo() {
-	hideOne();
-	$(".toolbar2").css("top", ($( window ).height()) + "px");
-    $(".toolbar2").show();
-   	$(".toolbar2").animate({"top": "-=160px"}, "slow");
-   	opened2 = true;
-}
-var opened = false;
-var opened2 = false;
-function hideAll() {
-	$("#slider2").hide();
-	$(".farbtastic").hide();
-	$(".tip").hide();
-	hideOne();
-	hideTwo();
-
-}
+    <script>
  
  if (localStorage.getItem('code')) {
  	$("#code").html(localStorage.getItem('code'));
@@ -318,127 +203,67 @@ function hideAll() {
 
  var currLine;
  var prev;
- var blurcalled = false;
- var x = 0;
+
  var blurManagement = function (e) {
- 	console.log("Calling blur");
- 	blurcalled = true;
- 	ignore = false;
+ 	console.log("blurred");
  }
  
  var focusManagement = function (e) {
- 	console.log("Calling focus");
+ 	console.log("focused");
  	ignore = true;
- 	//$('div.CodeMirror').find('textarea').blur();
  }
-var y; 
- // use dec_sep for internationalization
-function decimals(x, dec_sep)
-{
-    var tmp=new String();
-    tmp=x;
-    if (tmp.indexOf(dec_sep)>-1)
-        return tmp.length-tmp.indexOf(dec_sep)-1;
-    else
-        return 0;
-} 
-function makeDraggable() {
-  for (var i = 0; i < numElements; i++) {
-    eval("element" + (i)).attr("id", i);
-    eval("element" + (i)).draggable({
-      drag: function (event, ui) {
-        var id = $(this).attr("id");
-        topLine = findLine("element" + id, ".css(\"top\"");
-        leftLine = findLine("element" + id, ".css(\"left\"");
-        editor.setLine(topLine, "  .css(\"top\", " + $(this).css("top").replace("px", "") + " + \"px\")");
-        editor.setLine(leftLine, "  .css(\"left\", " + $(this).css("left").replace("px", "") + " + \"px\")");
-
-
-        console.log($(this).attr("id"));
-        console.log($(this).css("top"));
-        console.log($(this).css("left"));
-
-      }
-    });
-  }
-}
-
  var autocompleteManagement = function (e) {
-   console.log("Calling autocomplete");
+   console.log("auto");
+   $('div.CodeMirror').find('textarea').blur();
    if (!ignore) {
-
-   	console.log("Inside logic");
+   	console.log("not ignored");
    var si = editor.getScrollInfo();
    //console.log(si.y);
    currLine = editor.getCursor(true);
-
-   var toffset = ((currLine.line + 2)* editor.defaultTextHeight()) - si.y;
+   var toffset = ((currLine.line + 2) * 20) - si.y;
    //console.log(toffset);
    
    //console.log(currLine);
    obj = editor.getTokenAt(currLine);
- 
-   indented = editor.getLineHandle(currLine.line)['stateAfter']['indented'];
-   console.log(editor.getLineHandle(currLine.line));
-   //indententation());
-   console.log(indented);
-   console.log(obj.start);
-   console.log(obj.end);
-   var loffset = (((obj.start + obj.end) / 2)) * 7.5 - si.x;
+   var loffset = (obj.start * 6);
    //console.log(obj);
    
    if (obj.className == null) {
-     hideAll();
+     $("#slider2").hide();
+     $(".farbtastic").hide();
+     $(".tip").hide();
    }
    
-   // Is it a do Something?
-   if (obj.className == "trigger") {
-   		showTwo();
-   }
    // Is it a boolean?
    if (obj.className == "binary") {
-   	$(".tip").css("margin-top", toffset + 30 + "px");
-     $(".tip").css("margin-left", loffset + "px");
-     $(".tip").html($(".trueFalse").html());
-     $("#slider2").hide();
-     $(".tip").show();
-     $(".farbtastic").hide();
-      var newstring = "true";
+	 var newstring = "true";
    	 var line = editor.getLine(currLine.line);
      if (obj.string == "true") {
 		var newstring = "false";
      } 
-     $("#true").click(function() {
-     	editor.replaceRange(newstring, {
+     editor.replaceRange(newstring, {
          line: currLine.line,
          ch: obj.start
        }, {
          line: currLine.line,
          ch: obj.end
        });
-    
-     });
-     $("#false").click(function() {
-     	editor.replaceRange(newstring, {
-         line: currLine.line,
-         ch: obj.start
-       }, {
-         line: currLine.line,
-         ch: obj.end
-       });
-    
-     });
+       
      runCode();
-	
-     
+   	
+
    	
    } 
 
     // Is it a font color?
    if (obj.className == "string" && obj.string.startsWith("\"#")) {
+     console.log("Color");
      $("#picker").unbind();
      $('#picker').farbtastic(function (e) {
-    
+       var c = hexToRgb(e),
+         h = rgbToHsl(c.r, c.g, c.b),
+         r = hslToRgb(h.h, h.s, h.l),
+         rgb = 'rgb(' + r.r + ',' + r.g + ',' + r.b + ')';
        //console.log(e);
        //console.log(currLine);
        //console.log(obj);
@@ -451,38 +276,27 @@ function makeDraggable() {
        });
        runCode();
      });
-     //console.log(obj.string);
-     $.farbtastic("#picker").setColor(obj.string.replace(/\"/g, ""));
+     $.farbtastic("#picker").setColor(obj.string);
      $(".farbtastic").css("margin-top", toffset + 30 + "px");
      $(".farbtastic").css("margin-left", loffset + "px");
      $("#slider2").hide();
      $(".tip").hide();
      $(".farbtastic").show();
-
    }
    
    // Is it a generic property?
    if (obj.className == "property") {
      $(".tip").css("margin-top", toffset + 30 + "px");
      $(".tip").css("margin-left", loffset + "px");
-     $(".tip").html($(".addDelete").html());
      $("#slider2").hide();
      $(".tip").show();
-     console.log("Result");
-     //var x = editor.getSearchCursor("});", currLine).findNext();
-     y = editor.getSearchCursor("});", currLine);
-     y.findNext();
-     console.log(y.pos.from.line);
      $(".farbtastic").hide();
-     $(".delete").click(function() {
-     	editor.removeLine(currLine.line);
+     $("#delete").click(function() {
+     	
      });
-     $(".add").unbind();
-     
-     $(".add").click(function() {
-     	showOne();
+     $("#add").click(function() {
+     	alert("add?");
      });
-     runCode();
    }
    
    // Is it a number?
@@ -495,15 +309,9 @@ function makeDraggable() {
 		val = parseInt(obj.string);
 		max = val * 2;
 		step = 1
-
-		numDecimals = decimals(obj.string, ".");
 		if (obj.string.indexOf(".") !== -1) {
 			val = parseFloat(obj.string);
-			if (numDecimals == 1) {
-				step = 0.1;
-			} else if (numDecimals == 2) {
-				step = 0.01;	
-			}
+			step = 0.1;
 			max = val * 2;
 		} else if (obj.string == "0") {
 			min = -10;
@@ -515,10 +323,8 @@ function makeDraggable() {
        max: max,
        value: val,
        step: step,
-       //slide: function (event, ui) {
-       //},
        slide: function (event, ui) {
-
+         //console.log(obj.start);
          editor.replaceRange(ui.value.toString(), {
            line: currLine.line,
            ch: obj.start
@@ -532,33 +338,23 @@ function makeDraggable() {
      $("#slider").slider("value", val);
 	}
 
-     $("#slider2").css("margin-top", toffset + 25 + "px");
-     $("#slider2").css("margin-left", loffset - 10 + "px");
+     $("#slider2").css("margin-top", toffset + 30 + "px");
+     $("#slider2").css("margin-left", loffset + "px");
      $("#slider2").show();
      $(".tip").hide();
      $(".farbtastic").hide();
-  
    }
    runCode();
-   } 
-
+   }
+   
  };
 
       editor = CodeMirror.fromTextArea(document.getElementById("code"), {
       	lineNumbers: true,
       	onCursorActivity: autocompleteManagement,
-	    onChange: function() {
-	    	changed = true;	
-	    },
-	    <?php
-	    if ($detect->isMobile()) {
-	    	?>
-	    readOnly: "nocursor", 
-	    <?php } ?>
-        onBlur: blurManagement,
+   onChange: focusManagement,
         onFocus: function() {
-        	console.log("Focused");
-        	ignore = false;
+          ignore = false;
         }
       });
       editor.setSize(500, 550);
@@ -567,7 +363,7 @@ function makeDraggable() {
       
       // Some extra stuff to do after the vis has been rendered
  function runPostCode() {
-	makeDraggable();
+
  }
  // When you change a curated set
  $('#selector').change(function () {
@@ -711,23 +507,30 @@ function makeDraggable() {
    return false;
  });
 
-function findLine(startQuery, endQuery) {
-	console.log("Looking for " + startQuery);
-	y = editor.setCursor({
-         line: 0,
-         ch: 0
- 	});
-    y = editor.getSearchCursor(startQuery, {line:0, ch:0});
-    y.findNext();
-    var start = y.pos.from.line;
-	console.log("starting point", start);
-	y = editor.getSearchCursor(endQuery, {line:start, ch:0});
-	y.findNext();
-	var end = y.pos.from.line;
-	console.log("ending point", end);
-	return end;
-}
  
+ //. Get the SVG
+ $("#samples").click(function () {
+   var recipe = window.open('', 'Samples', 'width=600,height=600');
+
+   var html = '<?php include("samples.txt") ?>';
+   recipe.document.open();
+   recipe.document.write(html);
+   recipe.document.close();
+
+   return false;
+ });
+
+ //. Get the SVG
+ $("#extract").click(function () {
+   var recipe = window.open('', 'SVG content', 'width=600,height=600');
+
+   var html = '<html><head><title>SVG content</title></head><body>Save the following into a blank text file and save as .svg<div id="content"><textarea cols="70" rows="30">' + vis.scene[0].canvas.innerHTML + '</textarea></div></body></html>';
+   recipe.document.open();
+   recipe.document.write(html);
+   recipe.document.close();
+
+   return false;
+ });
 
  // Render the suggestions
  $(".clickable").click(function () {
@@ -740,76 +543,24 @@ function findLine(startQuery, endQuery) {
    var name = $(this).find("img").attr("alt");
    getContent(type, name);
  });
- 
-
-
 
  // Load the snippets
  $(".icons").click(function () {
-    var codeid = $(this).attr("id");
+   var codeid = $(this).attr("id");
+   $.ajax({
+     type: "POST",
+     url: 'getSnippet.php',
+     data: "type=" + codeid,
+     success: function (data) {
+       var content = editor.getValue();
+       content += data;
+       editor.setValue(content);
+       editor.scrollIntoView({line:editor.lineCount(), ch:0});
+       runCode();
+     }
+   });
+ })
 
-    $.ajax({
-        type: "POST",
-        url: 'getSnippet.php',
-        data: "type=" + codeid,
-        success: function (data) {
-        	if (codeid == "box") {
-            y = editor.setCursor({
-                line: 0,
-                ch: 0
-            });
-            y = editor.getSearchCursor("$(\"#elements\")", currLine);
-            y.findNext();
-            var start = y.pos.from.line;
-            console.log("Found start elements at" + start);
-            y = editor.getSearchCursor(";", {
-                line: start,
-                ch: 0
-            });
-            console.log(y);
-            if (y.findNext()) {
-                var end = y.pos.from.line;
-                console.log("Found end elements at" + end);
-                editor.replaceRange("", {
-                    line: start,
-                    ch: 0
-                }, {
-                    line: end+1,
-                    ch: 0
-                });
-            }
-        	}
-            var content = editor.getValue();
-            if (codeid == "box") {
-            	data = data.replace("X", numElements);
-            }
-            content += data;
-
-
-            if (codeid == "box") {
-            	
-                numElements++;
-
-
-                var result = "\n\n$(\"#elements\")";
-                for (var i = 0; i < numElements; i++) {
-                    result += "\n.append(element" + i + ")";
-                }
-                result += ";\n"
-                //editor.setLine(y.pos.from.line, result);
-                content += result;
-                
-            }
-            editor.setValue(content);
-            editor.scrollIntoView({
-                line: editor.lineCount(),
-                ch: 0
-            });
-            runCode();
-           
-        }
-    });
-});
 
 
  $(".dock").click(function () {
@@ -824,36 +575,33 @@ function findLine(startQuery, endQuery) {
    }
  });
  
+ $(".brew").click(function () {
+   var src = $(this).attr("src");
+
+   $(".brew").css("border", "3px solid #08306b");
+   $(this).css("border", "3px solid #fff");
+
+   var hue = $(this).attr("src").split("/")[1].split(".")[0];
+   var dataclasses = $("#dataclasses").val();
+   var colorstring = JSON.stringify(gvcolors[hue + dataclasses]);
+
+   $.ajax({
+     type: "POST",
+     url: 'getColors.php',
+     data: "hue=" + hue + "&classes=" + dataclasses + "&colorstring=" + colorstring,
+     success: function (data) {
+       var content = editor.getValue();
+       content = content.replace("vis.render();", "");
+       content += data;
+       content += "\n\nvis.render();";
+       editor.setCode(content);
+       editor.jumpToLine(editor.lastLine())
+       runCode();
+     }
+   });
+ });
 
 
     </script>
-    <div class="toolbar hidden">
-    
-		<div class="p">
-			<div class="subclasses2" method="css" id="border-radius" type="number">border-radius</div>
-			<div class="subclasses2" method="css" id="background" type="color">background</div>
-			<div class="subclasses2" method="css" id="" type="background-image">background-image</div>
-			<div class="subclasses2" method="css" id="border-color" type="color">border-color</div>
-			<div class="subclasses2" method="css" id="border-width" type="number">border-width</div>
-			<div class="subclasses2" method="css" id="height" type="number">height</div>
-			<div class="subclasses2" method="css" id="width" type="number">width</div>
-
-			<div class="subclasses2" method="css" id="opacity" type="decimal">opacity</div>
-			<div class="subclasses2" method="css" id="top" type="number">top</div>
-
-			<div class="subclasses2" method="css" id="left" type="number">left</div>
-			<div class="subclasses2" method="css" id="transform" type="angle">rotate</div>
-			<div class="subclasses2" method="click" id="click" type="playnote">click</div>
-			<div class="subclasses2" method="css" id="solid" type="choice">border-style</div>
-			
-		</div>
-	</div>
-
-    <div class="toolbar2 hidden">
-    
-		<div class="p">
-			<div class="subclasses2" method="action" id="playnote">playnote</div>
-		</div>
-	</div>
   </body>
 </html>

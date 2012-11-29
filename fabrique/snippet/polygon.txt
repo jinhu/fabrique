@@ -1,0 +1,11 @@
+
+/* New polygon */
+
+$("canvas").drawPolygon({
+  fillStyle: "#3b6",
+  strokeStyle: "#083",
+  x: 100, y: 100,
+  radius: 50,
+  sides: 50,
+  projection: 0.1
+});
