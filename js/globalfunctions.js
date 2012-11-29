@@ -75,8 +75,11 @@ function isInt(n) {
   return n === +n && n === (n | 0);
 }
 
+
+
 function runCode() {
 //console.log("Running");
+
   hiddenvars = 0;
   $("#elements").html("");
   allslices = Array();
@@ -98,6 +101,7 @@ function runCode() {
     script.text = content;
     head.appendChild(script);
     runPostCode();
+
   } else {
     alert("Invalid string found. An attempt has been made to prevent unwanted malicious code to execute. If you believe this is in error, please contact the author.");
   }

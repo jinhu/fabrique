@@ -1,9 +1,0 @@
-/* New generic element */
-
-var elementX = $("<div />")
-  .css("position", "absolute")
-  .css("background", "#000")
-  .css("width", 100 + "px")
-  .css("height", 100 + "px")
-  .css("top", 100 + "px")
-  .css("left", 100 + "px")

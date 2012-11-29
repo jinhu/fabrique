@@ -1,9 +1,0 @@
-
-/* New text */
-
-$("canvas").drawText({
-  fillStyle: "#000000",
-  x: 100, y: 100,
-  font: 20 + "pt Helvetica Neue, Helvetica, sans-serif",
-  text: "Sample text"
-});
